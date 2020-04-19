@@ -1,9 +1,13 @@
 <template>
   <div id="home">
-    <nav-bar class="home-nav">
-      <div slot="center">购物街</div>
-    </nav-bar>
-    <scroll class="content">
+    <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
+
+    <scroll class="content"
+            ref="scroll"
+            :probe-type="3"
+            @scroll="contentScroll"
+            :pull-up-load="true"
+            @pullingUp="loadMore">
       <home-swiper :banners="banners"></home-swiper>
       <recommend-view :recommends="recommends"></recommend-view>
       <feature-view></feature-view>
@@ -13,6 +17,8 @@
       <goods-list :goods="goods[currentType].list"></goods-list>
     </scroll>
 
+    <back-top @click.native="backClick" v-show="isShowBackTop"/>
+
   </div>
 </template>
 
@@ -21,6 +27,7 @@
   import TabControl from "components/content/tabControl/TabControl";
   import GoodsList from "components/content/goods/GoodsList";
   import Scroll from "components/common/scroll/Scroll";
+  import BackTop from "components/content/backTop/BackTop";
 
   import HomeSwiper from './childComps/HomeSwiper'
   import RecommendView from "./childComps/RecommendView";
@@ -42,6 +49,7 @@
           'sell': {page: 0, list: []},
         },
         currentType: 'pop',
+        isShowBackTop:false
       }
     },
     components: {
@@ -52,6 +60,7 @@
       TabControl,//文字导航
       GoodsList,//商品列表
       Scroll,//滚动插件
+      BackTop,//返回顶部
 
     },
     created() {
@@ -78,8 +87,19 @@
           case 2:
             this.currentType = 'sell'
             break;
-
         }
+      },
+      /*回到顶部*/
+      backClick(){
+        this.$refs.scroll.scrollTo(0,0)
+      },
+      /*监听滚动的坐标位置*/
+      contentScroll(position){
+       this.isShowBackTop = -(position.y) >1000
+      },
+      //上拉加载
+      loadMore(){
+        this.getHomeGoods(this.currentType)
       },
       /**
        * 网络请求相关方法
@@ -95,6 +115,7 @@
         getHomeGoods(type, page).then(res => {
           this.goods[type].list.push(...res.data.list) /*将获取到的数据依次加入到godds中的list数组中*/
           this.goods[type].page += 1
+          this.$refs.scroll.finishPullUp()
         })
       }
     }
@@ -105,7 +126,7 @@
   #home {
     position: relative;
     padding-top: 44px;
-    height: 100vh;/*可视高度*/
+    height: 100vh; /*可视高度*/
   }
 
   .home-nav {
@@ -124,7 +145,7 @@
     z-index: 9;
   }
 
-  .content{
+  .content {
     /*height: 300px;*/
     position: absolute;
     top: 44px;
