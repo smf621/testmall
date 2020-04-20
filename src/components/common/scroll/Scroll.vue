@@ -35,22 +35,34 @@
         pullUpLoad:this.pullUpLoad//是否监听上拉刷新
       })
       //2.监听滚动的位置
-      this.scroll.on('scroll',(position) => {
-        // console.log(position);
-        this.$emit('scroll',position)
-      })
+      if (this.probeType ===2 || this.probeType ===3){
+        this.scroll.on('scroll',(position) => {
+          // console.log(position);
+          this.$emit('scroll',position)
+        })
+      }
       //3.监听上拉事件
-      this.scroll.on('pullingUp',()=>{
-        // console.log('pullingUp');
-        this.$emit('pullingUp')
-      })
+      if (this.pullUpLoad){
+        this.scroll.on('pullingUp',()=>{
+          // console.log('pullingUp');
+          this.$emit('pullingUp')
+        })
+      }
+
+      this.scroll.refresh()
     },
     methods:{
       scrollTo(x,y,time=300){
-        this.scroll.scrollTo(x,y,time)
+        this.scroll && this.scroll.scrollTo(x,y,time)
       },
       finishPullUp(){
         this.scroll.finishPullUp()
+      },
+      refresh(){
+        this.scroll && this.scroll.refresh()
+      },
+      getScrollY(){
+        return this.scroll ? this.scroll.y : 0
       }
     }
 

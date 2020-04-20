@@ -16,9 +16,7 @@
       recommends:{
         type:Array,
         default(){
-          return[
-
-          ]
+          return[]
         }
       }
     }
