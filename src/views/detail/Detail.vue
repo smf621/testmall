@@ -1,7 +1,7 @@
 <template>
   <div id="detail" >
     <detail-nav-bar class="detail-nav"></detail-nav-bar>
-    <scroll class="content" ref="scroll">
+    <scroll class="content" ref="scroll" >
       <detail-swiper :top-images="topImages"></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
@@ -27,6 +27,7 @@
   import GoodsList from "components/content/goods/GoodsList"
 
   import {getDetail, Goods,Shop,GoodsParam,getRecommend} from "network/detail";
+  import {itemListenerMixin} from "common/mixin";
 
   export default {
     name: "Detail",
@@ -41,6 +42,7 @@
       DetailCommentInfo,
       GoodsList
     },
+    mixins:[itemListenerMixin],
     data() {
       return {
         iid: null,
@@ -50,7 +52,8 @@
         detailInfo:{},
         paramInfo:{},
         commentInfo:{},
-        getRecommends:[]
+        getRecommends:[],
+        itemImgListener:null
       }
     },
     methods:{
@@ -87,11 +90,17 @@
           this.commentInfo = data.rate.list[0]
         }
       })
-
       //3.请求推荐数据
       getRecommend().then(res=>{
         this.getRecommends = res.data.list
       })
+    },
+    mounted() {
+      console.log('mounted');
+    },
+    destroyed() {
+      this.$bus.$off('itemImgLoad',this.itemImgListener)
+
     }
   }
 </script>

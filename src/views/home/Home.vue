@@ -39,6 +39,7 @@
 
   import {getHomeMultidata, getHomeGoods} from 'network/home'
   import {debounce} from "common/utils"
+  import {itemListenerMixin} from "common/mixin";
 
 
   export default {
@@ -57,6 +58,7 @@
         tabOffsetTop:0,
         isTabFixed:false,
         saveY:0,
+        itemImgListener:null
       }
     },
     components: {
@@ -78,7 +80,11 @@
       this.$refs.scroll.refresh()
     },
     deactivated(){
+      //1.保存Y值
       this.saveY = this.$refs.scroll.getScrollY()
+
+      //2.取消全局事件监听
+      this.$bus.$off('itemImageLoad',this.itemImgListener)
     },
     created() {
       //1.请求多个数据
@@ -88,14 +94,17 @@
       this.getHomeGoods('pop')
       this.getHomeGoods('new')
       this.getHomeGoods('sell')
-
     },
+    mixins:[itemListenerMixin],
     mounted(){
-      //1.监听item中图片加载完成
-      const refresh =debounce(this.$refs.scroll.refresh,50)
-      this.$bus.$on('itemImageLoad', () => {
-        refresh()
-      })
+      // //1.监听item中图片加载完成
+      // let newRefresh =debounce(this.$refs.scroll.refresh,50)
+      //
+      // //对监听的事件进行保存
+      // this.itemImgListener = () => {
+      //   newRefresh(20,30,'abc')
+      // }
+      // this.$bus.$on('itemImageLoad',  this.itemImgListener)
 
       // //2.获取到tabControl的offsetTop
       // this.tabOffsetTop = this.$refs.tabControl
