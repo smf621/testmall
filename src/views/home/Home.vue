@@ -44,6 +44,7 @@
 
   export default {
     name: "Home",
+    mixins:[itemListenerMixin],
     data() {
       return {
         banners: [],
@@ -95,19 +96,19 @@
       this.getHomeGoods('new')
       this.getHomeGoods('sell')
     },
-    mixins:[itemListenerMixin],
     mounted(){
-      // //1.监听item中图片加载完成
-      // let newRefresh =debounce(this.$refs.scroll.refresh,50)
-      //
-      // //对监听的事件进行保存
-      // this.itemImgListener = () => {
-      //   newRefresh(20,30,'abc')
-      // }
-      // this.$bus.$on('itemImageLoad',  this.itemImgListener)
+      //1.监听item中图片加载完成
+      let newRefresh =debounce(this.$refs.scroll.refresh,50)
+
+      //对监听的事件进行保存
+      this.itemImgListener = () => {
+        newRefresh(20,30,'abc')
+      }
+      this.$bus.$on('itemImageLoad',  this.itemImgListener)
 
       // //2.获取到tabControl的offsetTop
       // this.tabOffsetTop = this.$refs.tabControl
+      this.tabClick(0)
     },
     methods: {
       /**
