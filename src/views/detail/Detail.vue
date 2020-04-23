@@ -6,7 +6,11 @@
             @scroll="contentScroll"
             :probe-type="3"
             >
-      <div>{{$store.state.cartList.length}}</div>
+      <ul>
+        <li v-for="item in $store.state.cartList">
+          {{item}}
+        </li>
+      </ul>
 
       <detail-swiper :top-images="topImages"/>
       <detail-base-info :goods="goods"/>
@@ -17,7 +21,7 @@
       <goods-list :goods="getRecommends" ref="recommend"/>
 
     </scroll>
-    <detail-bottom-bar @addCart="addToCart"/>
+    <detail-bottom-bar @addCart="addToCart" class="bottom-nav"/>
     <back-top @click.native="backClick" v-show="isShowBackTop"/>
 
 
@@ -133,7 +137,7 @@
 
         // 2.将商品添加到购物车里面
         // this.$store.cartList.push(product)
-        this.$store.commit('addCart',product)
+        this.$store.dispatch('addCart',product)
       }
 
     },
@@ -206,5 +210,6 @@
   .content {
     height: calc(100% - 44px - 58px);
   }
+
 
 </style>
