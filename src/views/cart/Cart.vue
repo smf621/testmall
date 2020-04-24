@@ -1,13 +1,13 @@
 <template>
   <div class="cart">
-    <!--      导航-->
+    <!--导航-->
     <nav-bar class="nav-bar">
       <div slot="center">购物车({{cartLength}})</div>
     </nav-bar>
-<!--商品列表-->
-  <cart-list />
-
-<!--    底部汇总-->
+    <!--商品列表-->
+    <cart-list />
+    <!--底部汇总-->
+    <cart-bottom-bar/>
 
   </div>
 </template>
@@ -15,6 +15,7 @@
 <script>
 import NavBar from 'components/common/navbar/NavBar'
 import CartList from './childComps/CartList'
+import CartBottomBar from "./childComps/CartBottomBar"
 
 import {mapGetters} from 'vuex'
 
@@ -22,7 +23,8 @@ import {mapGetters} from 'vuex'
     name: "Cart",
     components:{
       NavBar,/*导航*/
-      CartList//商品列表
+      CartList,//商品列表
+      CartBottomBar,//底部结算
 
     },
     computed:{
@@ -39,7 +41,6 @@ import {mapGetters} from 'vuex'
   .cart{
     height: 100vh;
   }
-
   .nav-bar{
     background-color: var(--color-tint);
     color: #fff;

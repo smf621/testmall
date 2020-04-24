@@ -19,9 +19,9 @@ export class Goods {
     this.columns = columns
     this.services = services
     this.realPrice = itemInfo.lowNowPrice
-
   }
 }
+
 export function getRecommend() {
   return request({
     url: '/recommend'
