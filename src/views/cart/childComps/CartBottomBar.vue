@@ -39,7 +39,9 @@ export default {
       // this.$store.state.cartList.forEach(item => item.checked =!this.isSelectAll)
     },
     calcClick(){
-
+      if (!this.isSelectAll){
+        this.$toast.show('请选择购买的商品',2000)
+      }
     }
   },
   computed:{

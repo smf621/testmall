@@ -133,13 +133,16 @@ export default {
       // 2.将商品添加到购物车里面
       // this.$store.cartList.push(product)
       this.addCart(product).then( res => {
-
-        this.show = true;
-        this.message = res;
-        setTimeout(() => {
-          this.show = false
-          this.message = ''
-        }, 1500)
+        //
+        // this.show = true;
+        // this.message = res;
+        // setTimeout(() => {
+        //   this.show = false
+        //   this.message = ''
+        // }, 1500)
+        // this.$total.show(res,2000)
+        this.$toast.show(res,1500)
+        // console.log(this.$toast);
 
       })
 
